@@ -16,16 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.flixter.MovieDetailsActivity;
 import com.example.flixter.R;
+import com.example.flixter.databinding.ItemMovieBinding;
 import com.example.flixter.models.Movie;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
     List<Movie> movies;
+    ItemMovieBinding binding;
 
     public MovieAdapter(Context context, List<Movie> movies) {
         this.context = context;
@@ -36,8 +40,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new ViewHolder(movieView);
+        binding = ItemMovieBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new ViewHolder();
     }
 
     // Involves populating data into the item through a holder
@@ -62,11 +66,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         TextView tvOverview;
         ImageView ivPoster;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOverview = itemView.findViewById(R.id.tvOverview);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
+        public ViewHolder() {
+            super(binding.getRoot());
+            tvTitle = binding.tvTitle;
+            tvOverview = binding.tvOverview;
+            ivPoster = binding.ivPoster;
             itemView.setOnClickListener(this);
         }
 
@@ -79,10 +83,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             String imageUrl = portrait ? movie.getPosterPath() : movie.getBackdropPath();
             int placeholder = portrait ? R.drawable.flicks_movie_placeholder : R.drawable.flicks_backdrop_placeholder;
 
+            final int radius = 30; // corner radius, higher value = more rounded
+            final int margin = 10; // crop margin, set to 0 for corners with no crop
+
 
             Glide.with(context).load(imageUrl)
                     .placeholder(placeholder)
                     .error(placeholder)
+                    .transform(new RoundedCornersTransformation(radius, margin))
                     .into(ivPoster);
         }
 
