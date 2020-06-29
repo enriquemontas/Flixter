@@ -40,4 +40,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <ImageView
+        android:id="@+id/ivPoster"
+        android:layout_width="240dp"
+        android:layout_height="360dp"
+        android:layout_below="@+id/tvOverview"
+        android:layout_marginTop="0dp"
+        android:clickable="false"
+        android:foregroundTint="#FFFFFF" />
+
 </RelativeLayout>
